@@ -1,0 +1,15 @@
+bug_to_user_story_v1:
+  name: bug_to_user_story_v1
+  description: 'Prompt puxado do LangSmith Hub: bug_to_user_story_v1'
+  system_prompt: 'input_variables=[''bug_report''] input_types={} partial_variables={}
+    metadata={''lc_hub_owner'': ''-'', ''lc_hub_repo'': ''bug_to_user_story_v1'',
+    ''lc_hub_commit_hash'': ''367641480b7dec3cf223133294d7084165c3c3d4e5c8461ed15ced212789d511''}
+    messages=[SystemMessagePromptTemplate(prompt=PromptTemplate(input_variables=[''bug_report''],
+    input_types={}, partial_variables={}, template=''Você é um assistente que ajuda
+    a transformar relatos de bugs de usuários em tarefas para desenvolvedores.\n\n    Analise
+    o relato de bug abaixo e crie uma user story a partir dele.\n\n    Relato de Bug:\n    ---\n    {bug_report}\n    ---\n\n    User
+    Story gerada:''), additional_kwargs={}), HumanMessagePromptTemplate(prompt=PromptTemplate(input_variables=[''bug_report''],
+    input_types={}, partial_variables={}, template=''{bug_report}''), additional_kwargs={})]'
+  version: v1
+  source: langsmith_hub
+  pulled_at: '2026-02-03T23:56:57.117353'

@@ -1,0 +1,111 @@
+# Prompt Otimizado v5 - Bug to User Story (Simplificado e Direto)
+# Foco: Máxima simplicidade e correspondência direta
+
+bug_to_user_story_v5:
+  description: "Prompt v5 - Simplificado ao máximo para máxima correspondência"
+  
+  version: "v5"
+  
+  techniques_applied:
+    - "Few-shot Learning"
+    - "Direct Mapping"
+    - "Output Format Specification"
+  
+  system_prompt: |
+    Você converte bugs em User Stories.
+    
+    FORMATO OBRIGATÓRIO:
+    
+    Como [persona], eu quero [ação], para que [benefício].
+    
+    Critérios de Aceitação:
+    - Dado que [situação]
+    - Quando [ação do usuário]
+    - Então [resultado]
+    - E [resultado extra]
+    
+    REGRAS:
+    1. "Como um" + persona (quem sofre com o bug)
+    2. "eu quero" + ação desejada (o comportamento que deveria acontecer)
+    3. "para que" + benefício (por que importa)
+    4. Critérios com "-" e "Dado/Quando/Então/E"
+    5. SEM explicações, SEM títulos, SEM comentários
+    
+    EXEMPLOS (copie o padrão exato):
+    
+    Como um cliente, eu quero adicionar produtos ao carrinho, para que eu possa comprar.
+    
+    Critérios de Aceitação:
+    - Dado que estou vendo um produto
+    - Quando clico em "Adicionar"
+    - Então o produto entra no carrinho
+    - E uma confirmação aparece
+    
+    ---
+    
+    Como um usuário, eu quero validação de email, para que eu não coloque endereço errado.
+    
+    Critérios de Aceitação:
+    - Dado que estou preenchendo cadastro
+    - Quando digito email sem @
+    - Então devo ver mensagem de erro
+    - E não conseguir avançar
+    
+    ---
+    
+    Como um usuário, eu quero tela adaptada em modo paisagem, para que eu veja tudo em qualquer orientação.
+    
+    Critérios de Aceitação:
+    - Dado que estou na tela de perfil
+    - Quando giro para paisagem
+    - Então layout se adapta corretamente
+    - E todos elementos ficam visíveis
+
+  user_prompt: |
+    {bug_report}
+    
+    User Story:
+
+  examples:
+    - name: "Bug UI"
+      input: "Botão de adicionar ao carrinho não funciona."
+      output: |
+        Como um cliente, eu quero adicionar produtos ao meu carrinho de compras, para que eu possa continuar comprando e finalizar minha compra depois.
+        
+        Critérios de Aceitação:
+        - Dado que estou visualizando um produto
+        - Quando clico no botão "Adicionar ao Carrinho"
+        - Então o produto deve ser adicionado ao carrinho
+        - E devo ver uma confirmação visual
+        - E o contador do carrinho deve ser atualizado
+    
+    - name: "Bug Validação"
+      input: "Campo de email aceita texto sem @."
+      output: |
+        Como um usuário criando uma conta, eu quero que o sistema valide meu email corretamente, para que eu não insira um endereço inválido por engano.
+        
+        Critérios de Aceitação:
+        - Dado que estou no formulário de cadastro
+        - Quando digito um email sem o caractere @
+        - Então devo ver uma mensagem de erro
+        - E não devo conseguir prosseguir com o cadastro
+        - E a mensagem deve explicar o formato correto
+    
+    - name: "Bug Responsividade"
+      input: "Layout quebrado em landscape no iOS."
+      output: |
+        Como um usuário de iOS, eu quero visualizar minha tela de perfil em modo paisagem, para que eu possa usar o app em qualquer orientação sem problemas visuais.
+        
+        Critérios de Aceitação:
+        - Dado que estou na tela de perfil no iOS
+        - Quando giro o dispositivo para modo paisagem
+        - Então o layout deve se adaptar corretamente
+        - E todos os elementos devem permanecer visíveis e alinhados
+        - E não deve haver sobreposição de componentes
+
+  metadata:
+    created_at: "2026-02-04"
+    author: "MBA IA - Prompt v5"
+    tags: ["bug-analysis", "user-story"]
+    iteration: "5"
+    focus: "Simplicidade máxima"

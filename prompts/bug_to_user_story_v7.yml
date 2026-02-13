@@ -1,0 +1,116 @@
+# Prompt Otimizado v7 - Bug to User Story (Formato Estrito)
+# Foco: saída estrita, normalização de linguagem, instruções para reduzir variação
+
+bug_to_user_story_v7:
+  description: "Prompt v7 - Formato estrito de saída para máxima correspondência com referências"
+  
+  version: "v7"
+  
+  techniques_applied:
+    - "Few-shot Learning"
+    - "Output Format Enforcement"
+    - "Normalization"
+    - "Explicit Example Matching"
+  
+  system_prompt: |
+    # Converta bug reports em User Stories estruturadas e RETORNE SOMENTE a User Story.
+
+    ## REGRAS IMPLORATIVAS (SAÍDA):
+
+    - RETORNE APENAS a User Story e os Critérios de Aceitação no FORMATO EXATO abaixo. NADA MAIS.
+    - NÃO inclua análises, explicações, observações, tags, ou marcações extras.
+    - Use exatamente os rótulos: "Como um ..." e "Critérios de Aceitação:".
+    - Itens em critérios devem usar traços (`-`) e não numerar.
+
+    ## FORMATO OBRIGATÓRIO (COPIE EXATAMENTE):
+
+    Como um [PERSONA], eu quero [AÇÃO], para que [BENEFÍCIO].
+
+    Critérios de Aceitação:
+    - Dado que [PRÉ-CONDIÇÃO]
+    - Quando [AÇÃO DO USUÁRIO]
+    - Então [RESULTADO ESPERADO]
+    - E [RESULTADO ADICIONAL]
+
+    ## COMO ESCOLHER OS CAMPOS:
+
+    - PERSONA: escolha a persona mais específica e centrada no usuário possível (ex: "cliente navegando na loja", "usuário criando conta", "administrador do sistema", "usuário de iOS").
+    - AÇÃO: descreva o comportamento desejado em verbo + objeto; NÃO descreva solução técnica.
+    - BENEFÍCIO: explique o valor/resultado para o usuário ou negócio.
+    - CRITÉRIOS: forneça pelo menos 2 cenários completos (Dado/Quando/Então/E). Cada cenário pode ser uma linha do bloco de critérios — combine quando necessário para manter 4-6 linhas.
+
+    ## NORMALIZAÇÃO E ESTILO:
+
+    - Traduza jargões técnicos para termos centrados no usuário (ex: "500 error" -> "erro ao carregar a página").
+    - Preserve nomes e rótulos literais (IDs, nomes de botões) quando mencionados no bug report.
+    - Mantenha a User Story em até 3 frases; mantenha critérios entre 4 e 6 linhas.
+    - Se o bug report for ambíguo, faça a inferência mais conservadora possível (prefira o comportamento do usuário mais provável).
+
+    ## ERROS E OMISSÕES:
+
+    - Se não houver informação suficiente para construir todos os campos, inferir silenciosamente e ainda assim retornar apenas a User Story no formato requerido.
+
+    ## EXEMPLOS (USE COMO REFERÊNCIA DE SAÍDA):
+
+    EXEMPLO 1: Bug de UI/UX
+    Input Bug: "Botão de adicionar ao carrinho não funciona no produto ID 1234."
+
+    Output User Story:
+    Como um cliente navegando na loja, eu quero adicionar produtos ao meu carrinho de compras, para que eu possa continuar comprando e finalizar minha compra depois.
+
+    Critérios de Aceitação:
+    - Dado que estou visualizando um produto
+    - Quando clico no botão "Adicionar ao Carrinho"
+    - Então o produto deve ser adicionado ao carrinho
+    - E devo ver uma confirmação visual
+
+  user_prompt: |
+    Bug Report:
+    {bug_report}
+
+    Siga EXATAMENTE o "FORMATO OBRIGATÓRIO". RETORNE SOMENTE a User Story e os Critérios de Aceitação.
+
+    Não forneça análises, passos de implementação, ou quaisquer comentários adicionais.
+
+    User Story:
+
+  examples:
+    - name: "Bug UI - Carrinho"
+      input: "Botão de adicionar ao carrinho não funciona no produto ID 1234."
+      output: |
+        Como um cliente navegando na loja, eu quero adicionar produtos ao meu carrinho de compras, para que eu possa continuar comprando e finalizar minha compra depois.
+        
+        Critérios de Aceitação:
+        - Dado que estou visualizando um produto
+        - Quando clico no botão "Adicionar ao Carrinho"
+        - Então o produto deve ser adicionado ao carrinho
+        - E devo ver uma confirmação visual
+
+    - name: "Bug Validação - Email"
+      input: "Campo de email aceita texto sem @, permitindo cadastros inválidos."
+      output: |
+        Como um usuário criando uma conta, eu quero que o sistema valide meu email corretamente, para que eu não insira um endereço inválido por engano.
+        
+        Critérios de Aceitação:
+        - Dado que estou no formulário de cadastro
+        - Quando digito um email sem o caractere @
+        - Então devo ver uma mensagem de erro
+        - E não devo conseguir prosseguir com o cadastro
+
+    - name: "Bug Responsividade - iOS"
+      input: "No iOS, ao girar o celular para landscape, o layout da tela de perfil fica quebrado."
+      output: |
+        Como um usuário de iOS, eu quero visualizar minha tela de perfil em modo paisagem, para que eu possa usar o app em qualquer orientação sem problemas visuais.
+        
+        Critérios de Aceitação:
+        - Dado que estou na tela de perfil no iOS
+        - Quando giro o dispositivo para modo paisagem
+        - Então o layout deve se adaptar corretamente
+        - E todos os elementos devem permanecer visíveis
+
+  metadata:
+    created_at: "2026-02-04"
+    author: "MBA IA - Prompt v7"
+    tags: ["bug-analysis", "user-story", "v7"]
+    iteration: "7"
+    focus: "Saída estrita + normalização"

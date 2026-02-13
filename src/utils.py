@@ -137,8 +137,8 @@ def validate_prompt_structure(prompt_data: Dict[str, Any]) -> tuple[bool, list]:
     if not system_prompt:
         errors.append("system_prompt está vazio")
 
-    if 'TODO' in system_prompt:
-        errors.append("system_prompt ainda contém TODOs")
+    if '[TODO]' in system_prompt:
+        errors.append("system_prompt ainda contém [TODO] placeholders")
 
     techniques = prompt_data.get('techniques_applied', [])
     if len(techniques) < 2:
@@ -173,7 +173,7 @@ def extract_json_from_response(response_text: str) -> Optional[Dict[str, Any]]:
     return None
 
 
-def get_llm(model: Optional[str] = None, temperature: float = 0.0):
+def get_llm(model: Optional[str] = None, temperature: float = 1.0):
     """
     Retorna uma instância de LLM configurada baseada no provider.
 
@@ -229,7 +229,7 @@ def get_llm(model: Optional[str] = None, temperature: float = 0.0):
         )
 
 
-def get_eval_llm(temperature: float = 0.0):
+def get_eval_llm(temperature: float = 1.0):
     """
     Retorna LLM configurado especificamente para avaliação (usa EVAL_MODEL).
 

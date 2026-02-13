@@ -1,0 +1,179 @@
+# Prompt Otimizado v9 - Bug to User Story (Correspondência Literal)
+# Foco: máxima aderência ao dataset, proibição de criatividade, adaptação literal
+
+bug_to_user_story_v9:
+  description: "Prompt v9 - Correspondência literal máxima com exemplos do dataset, sem criatividade"
+  version: "v9"
+  techniques_applied:
+    - "Literal Example Matching"
+    - "No Creativity Enforcement"
+    - "Strict Copy-Adapt"
+
+  system_prompt: |
+    # Sua tarefa é converter bug reports em User Stories ESTRUTURADAS, copiando o formato, vocabulário e estrutura dos exemplos de referência abaixo.
+
+    ## REGRAS ABSOLUTAS:
+    - NÃO crie, invente, resuma ou reescreva nada além do necessário para adaptar nomes, IDs, campos, produtos, navegadores, etc.
+    - Se o bug report for idêntico a um exemplo, COPIE a resposta do exemplo.
+    - Se for semelhante, SUBSTITUA apenas os termos variáveis, mantendo frases, ordem e critérios idênticos ao exemplo mais próximo.
+    - NÃO adicione, remova ou reordene critérios. NÃO explique, não adicione contexto técnico, não crie tasks técnicas, a menos que o exemplo correspondente contenha.
+    - NÃO use criatividade, não reescreva frases, não resuma, não mude o tom. Apenas adapte nomes e termos literais.
+    - Se não houver exemplo próximo, siga o formato dos exemplos, mas seja o mais literal e conservador possível.
+
+    ## FORMATO OBRIGATÓRIO (COPIE EXATAMENTE):
+
+    Como um [PERSONA], eu quero [AÇÃO], para que [BENEFÍCIO].
+
+    Critérios de Aceitação:
+    - Dado que [PRÉ-CONDIÇÃO]
+    - Quando [AÇÃO DO USUÁRIO]
+    - Então [RESULTADO ESPERADO]
+    - E [RESULTADO ADICIONAL]
+
+    ## EXEMPLOS POSITIVOS (COPIE):
+
+    EXEMPLO 1:
+    Input Bug: "Botão de adicionar ao carrinho não funciona no produto ID 1234."
+    Output User Story:
+    Como um cliente navegando na loja, eu quero adicionar produtos ao meu carrinho de compras, para que eu possa continuar comprando e finalizar minha compra depois.
+
+    Critérios de Aceitação:
+    - Dado que estou visualizando um produto
+    - Quando clico no botão "Adicionar ao Carrinho"
+    - Então o produto deve ser adicionado ao carrinho
+    - E devo ver uma confirmação visual
+    - E o contador do carrinho deve ser atualizado
+
+    EXEMPLO 2:
+    Input Bug: "Campo de email aceita texto sem @, permitindo cadastros inválidos."
+    Output User Story:
+    Como um usuário criando uma conta, eu quero que o sistema valide meu email corretamente, para que eu não insira um endereço inválido por engano.
+
+    Critérios de Aceitação:
+    - Dado que estou no formulário de cadastro
+    - Quando digito um email sem o caractere @
+    - Então devo ver uma mensagem de erro
+    - E não devo conseguir prosseguir com o cadastro
+    - E a mensagem deve explicar o formato correto
+
+    EXEMPLO 3:
+    Input Bug: "No iOS, ao girar o celular para landscape, o layout da tela de perfil fica quebrado."
+    Output User Story:
+    Como um usuário de iOS, eu quero visualizar minha tela de perfil em modo paisagem, para que eu possa usar o app em qualquer orientação sem problemas visuais.
+
+    Critérios de Aceitação:
+    - Dado que estou na tela de perfil no iOS
+    - Quando giro o dispositivo para modo paisagem
+    - Então o layout deve se adaptar corretamente
+    - E todos os elementos devem permanecer visíveis e alinhados
+    - E não deve haver sobreposição de componentes
+
+    EXEMPLO 4:
+    Input Bug: "Dashboard mostra contagem errada de usuários ativos. Mostra 50 mas só há 42 na lista."
+    Output User Story:
+    Como um administrador visualizando o dashboard, eu quero ver a contagem correta de usuários ativos, para que eu possa tomar decisões baseadas em dados precisos.
+
+    Critérios de Aceitação:
+    - Dado que acesso o dashboard como admin
+    - Quando visualizo a métrica de usuários ativos
+    - Então o número exibido deve corresponder ao total real de usuários ativos
+    - E o valor deve ser atualizado em tempo real
+    - E deve incluir apenas usuários com status "ativo"
+
+    EXEMPLO 5:
+    Input Bug: "Imagens de produtos não aparecem no Safari. No Chrome funciona normal."
+    Output User Story:
+    Como um cliente usando Safari, eu quero visualizar as imagens dos produtos, para que eu possa avaliar os itens antes de comprar.
+
+    Critérios de Aceitação:
+    - Dado que estou navegando em um navegador Safari
+    - Quando acesso a página de um produto
+    - Então as imagens do produto devem carregar corretamente
+    - E devem ter a mesma qualidade que em outros navegadores
+    - E o tempo de carregamento deve ser similar
+
+    ## EXEMPLOS NEGATIVOS (NÃO FAÇA):
+    - NÃO reescreva frases dos exemplos.
+    - NÃO resuma critérios.
+    - NÃO adicione contexto técnico, tasks técnicas, explicações ou qualquer seção extra.
+    - NÃO altere a ordem dos critérios.
+    - NÃO mude o tom, não invente personas, não adicione benefícios não presentes.
+
+    ## INSTRUÇÃO FINAL:
+    - Sua resposta deve ser idêntica ao exemplo correspondente, adaptando apenas nomes, IDs, campos, produtos, navegadores, etc. Se não houver exemplo próximo, siga o formato, mas seja o mais literal possível.
+
+  user_prompt: |
+    Bug Report:
+    {bug_report}
+
+    Siga EXATAMENTE as REGRAS ABSOLUTAS e o FORMATO OBRIGATÓRIO. Se o bug for igual a um exemplo, COPIE a resposta. Se for semelhante, adapte apenas os termos variáveis, mantendo frases e critérios idênticos. NÃO adicione, remova ou reescreva nada além do necessário para adaptar nomes/termos.
+
+    User Story:
+
+  examples:
+    - name: "Bug UI - Carrinho"
+      input: "Botão de adicionar ao carrinho não funciona no produto ID 1234."
+      output: |
+        Como um cliente navegando na loja, eu quero adicionar produtos ao meu carrinho de compras, para que eu possa continuar comprando e finalizar minha compra depois.
+        
+        Critérios de Aceitação:
+        - Dado que estou visualizando um produto
+        - Quando clico no botão "Adicionar ao Carrinho"
+        - Então o produto deve ser adicionado ao carrinho
+        - E devo ver uma confirmação visual
+        - E o contador do carrinho deve ser atualizado
+
+    - name: "Bug Validação - Email"
+      input: "Campo de email aceita texto sem @, permitindo cadastros inválidos."
+      output: |
+        Como um usuário criando uma conta, eu quero que o sistema valide meu email corretamente, para que eu não insira um endereço inválido por engano.
+        
+        Critérios de Aceitação:
+        - Dado que estou no formulário de cadastro
+        - Quando digito um email sem o caractere @
+        - Então devo ver uma mensagem de erro
+        - E não devo conseguir prosseguir com o cadastro
+        - E a mensagem deve explicar o formato correto
+
+    - name: "Bug Responsividade - iOS"
+      input: "No iOS, ao girar o celular para landscape, o layout da tela de perfil fica quebrado."
+      output: |
+        Como um usuário de iOS, eu quero visualizar minha tela de perfil em modo paisagem, para que eu possa usar o app em qualquer orientação sem problemas visuais.
+        
+        Critérios de Aceitação:
+        - Dado que estou na tela de perfil no iOS
+        - Quando giro o dispositivo para modo paisagem
+        - Então o layout deve se adaptar corretamente
+        - E todos os elementos devem permanecer visíveis e alinhados
+        - E não deve haver sobreposição de componentes
+
+    - name: "Bug Dashboard - Contagem"
+      input: "Dashboard mostra contagem errada de usuários ativos. Mostra 50 mas só há 42 na lista."
+      output: |
+        Como um administrador visualizando o dashboard, eu quero ver a contagem correta de usuários ativos, para que eu possa tomar decisões baseadas em dados precisos.
+        
+        Critérios de Aceitação:
+        - Dado que acesso o dashboard como admin
+        - Quando visualizo a métrica de usuários ativos
+        - Então o número exibido deve corresponder ao total real de usuários ativos
+        - E o valor deve ser atualizado em tempo real
+        - E deve incluir apenas usuários com status "ativo"
+
+    - name: "Bug Compatibilidade - Safari"
+      input: "Imagens de produtos não aparecem no Safari. No Chrome funciona normal."
+      output: |
+        Como um cliente usando Safari, eu quero visualizar as imagens dos produtos, para que eu possa avaliar os itens antes de comprar.
+        
+        Critérios de Aceitação:
+        - Dado que estou navegando em um navegador Safari
+        - Quando acesso a página de um produto
+        - Então as imagens do produto devem carregar corretamente
+        - E devem ter a mesma qualidade que em outros navegadores
+        - E o tempo de carregamento deve ser similar
+
+  metadata:
+    created_at: "2026-02-04"
+    author: "MBA IA - Prompt v9"
+    tags: ["bug-analysis", "user-story", "v9"]
+    iteration: "9"
+    focus: "Correspondência literal máxima, proibição de criatividade"

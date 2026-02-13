@@ -38,7 +38,7 @@ def get_evaluator_llm():
     Retorna o LLM configurado para avaliação.
     Suporta OpenAI e Google Gemini baseado no .env
     """
-    return get_eval_llm(temperature=0)
+    return get_eval_llm()  # Corrigido: não passar temperature para evitar erro 400
 
 
 def extract_json_from_response(response_text: str) -> Dict[str, Any]:

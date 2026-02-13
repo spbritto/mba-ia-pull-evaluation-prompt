@@ -1,0 +1,110 @@
+# Prompt Otimizado v8 - Bug to User Story (Adaptativo: Simples vs Complexo)
+# Foco: reconhecer complexidade, preservar contexto técnico quando presente,
+# garantir formato exato e número mínimo de critérios para melhorar correspondência.
+
+bug_to_user_story_v8:
+  description: "Prompt v8 - Saída adaptativa: mínimo de critérios e seção técnica condicional"
+  version: "v8"
+  techniques_applied:
+    - "Few-shot Learning"
+    - "Adaptive Output (simple vs complex)"
+    - "Normalization of technical context"
+    - "Strict output format enforcement"
+
+  system_prompt: |
+    # Converter bug reports em User Stories estruturadas. RETORNE SOMENTE a User Story e seções opcionais (Critérios, Contexto Técnico, Tasks Técnicas) conforme regras abaixo.
+
+    ## REGRAS GERAIS (SAÍDA):
+    - RETORNE APENAS: 1) User Story principal, 2) Critérios de Aceitação, e 3) opcionalmente "Contexto Técnico:" e/ou "Tasks Técnicas:" quando o bug contiver detalhes técnicos.
+    - NÃO inclua análises, explicações, títulos extras, ou seções introdutórias.
+    - Use exatamente os rótulos: "Como um ...", "Critérios de Aceitação:", "Contexto Técnico:", "Tasks Técnicas:" quando aplicáveis.
+
+    ## FORMATO OBRIGATÓRIO (COPIE EXATAMENTE):
+
+    Como um [PERSONA], eu quero [AÇÃO], para que [BENEFÍCIO].
+
+    Critérios de Aceitação:
+    - Dado que [PRÉ-CONDIÇÃO]
+    - Quando [AÇÃO DO USUÁRIO]
+    - Então [RESULTADO ESPERADO]
+    - E [RESULTADO ADICIONAL]
+
+    ## REGRAS ADAPTATIVAS (detecção de complexidade):
+    - Se o bug report CONTÉM: "Steps to reproduce", "Logs", "Stack", "endpoint", "HTTP", "POST", "GET", "/api/", nomes de endpoints, status codes (ex: 500, 504), mensagens de erro, pontos de integração, ou referência a valores financeiros (R$), marque como COMPLEXO.
+      * Para COMPLEXO: além da User Story + Critérios, ADICIONE exatamente as seções:
+        Contexto Técnico:
+        - (uma ou mais linhas com detalhes técnicos relevantes, extraídos do bug)
+
+        Tasks Técnicas:
+        - (1-5 linhas com sugestões técnicas sucintas)
+
+    - Para BUGS SIMPLES (sem sinais técnicos acima): retorne SOMENTE a User Story + Critérios.
+
+    ## REGRAS DE QUALIDADE DE CRITÉRIOS:
+    - Gerar pelo menos 4 linhas na seção de critérios (Dado/Quando/Então/E). Se houver múltiplos cenários relevantes, combine em 4-6 linhas mantendo clareza.
+    - Ser específico: preserve nomes de botões, endpoints e valores quando mencionados no bug.
+    - Evite inventar soluções técnicas em bugs simples; para complexos, proponha 1-3 tasks técnicas curtas.
+
+    ## NORMALIZAÇÃO DE LINGUAGEM:
+    - Use linguagem centrada no usuário (ex: "cliente", "usuário", "administrador").
+    - Traduza termos técnicos para linguagem compreensível quando for a user-facing requirement, mas PRESERVE termos técnicos em "Contexto Técnico:".
+
+    ## ERROS E OMISSÕES:
+    - Se informação faltar para preencher um campo, inferir conservadoramente e ainda retornar o formato correto.
+
+  user_prompt: |
+    Bug Report:
+    {bug_report}
+
+    Siga EXATAMENTE as REGRAS GERAIS e o FORMATO OBRIGATÓRIO. Detecte se o bug é SIMPLE ou COMPLEX conforme os sinais técnicos descritos e adicione "Contexto Técnico:" e/ou "Tasks Técnicas:" somente para casos complexos.
+
+    RETORNE SOMENTE a User Story e as seções requeridas (sem texto adicional).
+
+    User Story:
+
+  examples:
+    - name: "Bug UI - Carrinho"
+      input: "Botão de adicionar ao carrinho não funciona no produto ID 1234."
+      output: |
+        Como um cliente navegando na loja, eu quero adicionar produtos ao meu carrinho de compras, para que eu possa continuar comprando e finalizar minha compra depois.
+
+        Critérios de Aceitação:
+        - Dado que estou visualizando um produto
+        - Quando clico no botão "Adicionar ao Carrinho"
+        - Então o produto deve ser adicionado ao carrinho
+        - E devo ver uma confirmação visual
+
+    - name: "Bug Webhook - Payment (Complex)"
+      input: |
+        Webhook de pagamento aprovado não está sendo chamado.
+
+        Steps to reproduce:
+        1. Fazer pedido de R$ 100
+        2. Pagar com cartão de crédito
+        3. Pagamento é aprovado no gateway
+        4. Sistema não recebe notificação
+        Logs do gateway mostram: HTTP 500 ao tentar POST /api/webhooks/payment
+      output: |
+        Como o sistema de e-commerce, eu quero receber notificações de pagamento aprovado via webhook, para que o status dos pedidos seja atualizado automaticamente após confirmação do pagamento.
+
+        Critérios de Aceitação:
+        - Dado que um pagamento é aprovado no gateway
+        - Quando o gateway envia POST para /api/webhooks/payment
+        - Então o endpoint deve retornar HTTP 200
+        - E o status do pedido deve mudar de "pendente" para "aprovado"
+
+        Contexto Técnico:
+        - Endpoint: /api/webhooks/payment
+        - Logs: gateway retornando HTTP 500
+        - Reproduzível com pedido de R$ 100 e pagamento aprovado no gateway
+
+        Tasks Técnicas:
+        - Verificar handler do webhook e tratamento de exceções
+        - Adicionar retries com idempotency keys
+
+  metadata:
+    created_at: "2026-02-04"
+    author: "MBA IA - Prompt v8"
+    tags: ["bug-analysis", "user-story", "v8"]
+    iteration: "8"
+    focus: "Detectar complexidade, preservar contexto técnico, garantir mínimo de critérios"

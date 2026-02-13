@@ -33,7 +33,7 @@ load_dotenv()
 
 
 def get_llm():
-    return get_configured_llm(temperature=0)
+    return get_configured_llm(temperature=1)
 
 
 def load_dataset_from_jsonl(jsonl_path: str) -> List[Dict[str, Any]]:
@@ -199,7 +199,7 @@ def evaluate_prompt(
 
         print("   Avaliando exemplos...")
 
-        for i, example in enumerate(examples[:10], 1):
+        for i, example in enumerate(examples[:15], 1):
             result = evaluate_prompt_on_example(prompt_template, example, llm)
 
             if result["answer"]:
@@ -211,7 +211,7 @@ def evaluate_prompt(
                 clarity_scores.append(clarity["score"])
                 precision_scores.append(precision["score"])
 
-                print(f"      [{i}/{min(10, len(examples))}] F1:{f1['score']:.2f} Clarity:{clarity['score']:.2f} Precision:{precision['score']:.2f}")
+                print(f"      [{i}/{min(15, len(examples))}] F1:{f1['score']:.2f} Clarity:{clarity['score']:.2f} Precision:{precision['score']:.2f}")
 
         avg_f1 = sum(f1_scores) / len(f1_scores) if f1_scores else 0.0
         avg_clarity = sum(clarity_scores) / len(clarity_scores) if clarity_scores else 0.0
@@ -311,7 +311,7 @@ def main():
     print("  python src/push_prompts.py\n")
 
     prompts_to_evaluate = [
-        "bug_to_user_story_v2",
+        "bug_to_user_story_v11",
     ]
 
     all_passed = True
